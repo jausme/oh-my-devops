@@ -78,8 +78,11 @@ jobs:
           TAG: ${{ needs.build.outputs.tag }}
         run: |
           NAMESPACE="oh-my-devops"
+
           export KUBECONFIG=kubeconfig.yaml
+
           echo "Deploying to Kubernetes with tag $REGISTRY/$APP_NAME:$TAG"
+
           kubectl set image deployment/landing-page landing-page=$REGISTRY/$APP_NAME:$TAG -n $NAMESPACE
           kubectl get pods -n $NAMESPACE
           sleep 10
