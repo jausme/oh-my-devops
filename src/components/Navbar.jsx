@@ -17,7 +17,9 @@ export const Navbar = () => {
 
   return (
     <nav
-      className="w-full h-20 flex flex-col justify-center items-center fixed bg-bgDark1 lg:bg-bgDarkTransparent z-40 lg:backdrop-blur-xl"
+      // className="w-full h-20 flex flex-col justify-center items-center fixed z-50"
+      className="w-full h-20 flex flex-col justify-center items-center fixed z-40 backdrop-blur-xl"
+
       aria-label="Main navigation"
     >
       <div className="2xl:w-[1280px] xl:w-10/12 w-11/12 flex justify-between items-center relative">
@@ -33,7 +35,7 @@ export const Navbar = () => {
                 <TailcastLogo />
               </div>
               <div className="text-white font-['Inter'] font-bold text-xl">
-                Tailcast
+                Oh my devops
               </div>
             </div>
           </a>

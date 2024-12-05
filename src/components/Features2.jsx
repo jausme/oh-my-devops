@@ -18,15 +18,15 @@ export const Features2 = () => (
             <div className="mb-4 py-3 md:pl-3 md:pr-20 lg:pr-12 rounded">
               <img
                 src={feature5.src}
-                alt="Feature image 5"
-                className="rounded-xl  main-border-gray"
+                alt="Advanced Analytics"
+                className="rounded-xl main-border-gray"
               />
             </div>
-            <div className="py-3 md:pl-20 lg:pl-12 md:pr-2 rounded ">
+            <div className="py-3 md:pl-20 lg:pl-12 md:pr-2 rounded">
               <img
                 src={feature6.src}
-                alt="Feature image 6"
-                className="rounded-xl  main-border-gray"
+                alt="Seamless Integration Tools"
+                className="rounded-xl main-border-gray"
               />
             </div>
           </div>
@@ -34,27 +34,29 @@ export const Features2 = () => (
 
         <div className="w-full lg:w-1/2 mb-12 lg:mb-0 xl:pl-8">
           <div className="mx-auto lg:mx-auto w-11/12 sm:w-4/5 md:w-3/4 lg:w-unset">
-            <span className="block-subtitle">Make Data-Driven Decisions</span>
+            <span className="block-subtitle">Optimize, Automate, Achieve</span>
             <h2 className="mt-6 mb-8 text-4xl lg:text-5xl block-big-title">
-              Issue tracking you’ll enjoy using
+              Smarter Tools for Smarter Teams
             </h2>
             <p className="mb-12 text-secondaryText leading-loose">
-              Monitor and track data issues with ease using our intuitive and
-              efficient issue tracking system. Stay ahead of potential problems
-              and improve your workflow.
+              Take your workflows to the next level with **Oh My DevOps**. From
+              advanced analytics that provide actionable insights to seamless
+              integrations with your favorite tools, we make it easier than ever
+              to optimize your development process and focus on what truly
+              matters—delivering results.
             </p>
             <ul className="mb-6 text-primaryText">
               <li className="mb-4 flex">
                 <CheckArrowIcon />
-                <span>Collaborative environment</span>
+                <span>Advanced analytics for informed decision-making</span>
               </li>
               <li className="mb-4 flex">
                 <CheckArrowIcon />
-                <span>Smart issue categorization</span>
+                <span>Seamless integration with third-party tools</span>
               </li>
               <li className="mb-4 flex">
                 <CheckArrowIcon />
-                <span>Customizable notifications</span>
+                <span>Effortless automation for repetitive tasks</span>
               </li>
             </ul>
           </div>
