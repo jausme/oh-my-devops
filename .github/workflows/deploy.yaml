@@ -1,0 +1,88 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io/jausme
+  ORGANIZATION: jausme
+  APP_NAME: oh-my-devops
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Declare job outputs at this level
+    outputs:
+      tag: ${{ steps.set-output-tag.outputs.tag }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        env:
+          USERNAME: ${{ github.actor }}
+          PASSWORD: ${{ secrets.GH_TOKEN }}
+        run: |
+          echo $PASSWORD | docker login $REGISTRY -u $USERNAME --password-stdin
+
+      - name: Build and Push Docker Image
+        id: build
+        run: |
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          IMAGE_TAG="${{ github.sha }}-$TIMESTAMP"
+          BRANCH_NAME=${{ github.ref_name }}
+          APP_NAME=${{ env.APP_NAME }}
+          TAG="$TIMESTAMP"
+
+          # Construir y etiquetar la imagen
+          docker build \
+            -t $REGISTRY/$APP_NAME:$IMAGE_TAG .
+          docker tag $REGISTRY/$APP_NAME:$IMAGE_TAG $REGISTRY/$APP_NAME:$TAG
+
+          # Subir ambas etiquetas
+          docker push $REGISTRY/$APP_NAME:$IMAGE_TAG
+          docker push $REGISTRY/$APP_NAME:$TAG
+
+          # Exportar el nombre de la imagen para los pasos siguientes
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "TAG PUBLISHED: $TAG"
+
+      - name: Set output tag
+        id: set-output-tag
+        run: |
+          echo "::set-output name=tag::$TAG"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      - name: Configure kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG_FILE }}" > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
+
+      - name: Deploy to Kubernetes
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+          TAG: ${{ needs.build.outputs.tag }}
+        run: |
+          NAMESPACE="oh-my-devops"
+          export KUBECONFIG=kubeconfig.yaml
+          echo "Deploying to Kubernetes with tag $REGISTRY/$APP_NAME:$TAG"
+          kubectl set image deployment/landing-page landing-page=$REGISTRY/$APP_NAME:$TAG -n $NAMESPACE
+          kubectl get pods -n $NAMESPACE
+          sleep 10
+          kubectl get pods -n $NAMESPACE
+          sleep 5
+          kubectl get pods -n $NAMESPACE
